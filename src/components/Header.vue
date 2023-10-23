@@ -11,10 +11,10 @@
         <li><router-link to="/about">О нас</router-link></li>
         <li><router-link to="/services">Услуги</router-link></li>
         <li><router-link to="/reviews">Отзывы</router-link></li>
-        <li v-if="!user"><router-link to="/auth">Авторизация/регистрация</router-link></li>
+        <li v-if="user"><router-link to="/auth">Авторизация/регистрация</router-link></li>
 <!--        <li v-if="user.admin === '1'"><router-link to="/admin">Админ панель</router-link></li>-->
         <li v-if="!user"><router-link to="/profile">Профиль</router-link></li>
-<!--        <li v-if="user"><router-link to="/logout">Выйти</router-link></li>-->
+        <li v-if="user"><router-link to="/logout">Выйти</router-link></li>
       </ul>
     </nav>
   </header>

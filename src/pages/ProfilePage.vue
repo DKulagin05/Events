@@ -3,38 +3,43 @@
     <div class="wrapper">
       <div v-if="CategoryArray.length > 0">
         <h1>Личный кабинет</h1>
-        <h2>Добро пожаловать, {{ user.client_name }}!</h2>
-        <p class="status">Статус клиента: {{ CategoryArray[user.client_category_id - 1] }}</p>
+        <h2>Добро пожаловать, {{ user.name }}!</h2>
+<!--        <p class="status">Статус клиента: {{ CategoryArray[user.client_category_id - 1] }}</p>-->
 
         <h3>Детали профиля:</h3>
         <div v-if="!editMode">
           <ul style="font-size: 18px; display:flex; flex-direction: column; gap: 5px">
-            <li><strong>Имя:</strong> {{ user.client_name }}</li>
-            <li><strong>Номер телефона:</strong> {{ user.client_phone }}</li>
-            <li><strong>Дата рождения:</strong> {{ user.birthday ?? 'Неизвестно' }}</li>
-            <li><strong>Всего потрачено:</strong> {{ totalSpent }} руб.</li>
+            <li><strong>ФИО:</strong> {{ user.name }} {{ user.surname }}</li>
+            <li><strong>Номер телефона:</strong> {{ user.phone }}</li>
+            <li><strong>Почта:</strong> {{ user.email }}</li>
+<!--            <li><strong>Дата рождения:</strong> {{ user.birthday ?? 'Неизвестно' }}</li>-->
+<!--            <li><strong>Всего потрачено:</strong> {{ totalSpent }} руб.</li>-->
           </ul>
           <button class="edit-button" @click="toggleEditMode">Редактировать</button>
         </div>
         <div v-else class="edit-container">
           <label for="name">Имя:</label>
-          <input type="text" id="name" v-model="editedUser.client_name" required>
+          <input type="text" id="name" v-model="editedUser.name" required>
+          <label for="surname">Фамилия:</label>
+          <input type="text" id="surname" v-model="editedUser.surname" required>
           <label for="phone">Номер телефона:</label>
-          <input type="text" id="phone" v-model="editedUser.client_phone" required>
-          <label for="birthday">Дата рождения:</label>
-          <input type="date" id="birthday" v-model="editedUser.birthday" required>
+          <input type="text" id="phone" v-model="editedUser.phone" required>
+          <label for="email">Почта:</label>
+          <input type="text" id="email" v-model="editedUser.email" required>
           <div class="edit-btn">
             <button class="save-button" @click="saveChanges">Сохранить</button>
             <button class="cancel-button" @click="cancelEdit">Отмена</button>
           </div>
         </div>
-
         <h3>Ваши заказы:</h3>
-        <ul style="display:flex; flex-direction: column; gap: 20px; font-size: 18px;">
-          <li v-for="order in orders" :key="order.id" style="">
-<!--            {{ order.id }} - {{ order.date }} - {{ order.title }} - {{ order.destination }} - {{ order.total_price }} руб. - {{ checkStatus(order.end_date) }}-->
-          </li>
-        </ul>
+        <div class="orders" v-if="userOrders.length > 0">
+          <ul style="display:flex; flex-direction: column; gap: 20px; font-size: 18px;">
+            <li v-for="order in orders" :key="order.id" style="">
+              <!--            {{ order.id }} - {{ order.date }} - {{ order.title }} - {{ order.destination }} - {{ order.total_price }} руб. - {{ checkStatus(order.end_date) }}-->
+            </li>
+          </ul>
+        </div>
+        <p v-else>Заказов пока нет</p>
       </div>
       <p v-else>Загрузка</p>
     </div>
@@ -46,10 +51,12 @@ export default {
   name: 'UserProfile',
   data() {
     return {
+      userOrders: [],
       user: {
-        client_name: 'user',
-        client_category_id: 1,
-        client_phone: 123,
+        name: 'user',
+        surname: 'surname',
+        email: 'email',
+        phone: 123,
       },
       editedUser: {},
       CategoryArray: [
@@ -117,7 +124,7 @@ export default {
     },
   },
   mounted() {
-    // this.user = JSON.parse(localStorage.getItem('user'))[0];
+    this.user = JSON.parse(localStorage.getItem('user'));
     // this.editedUser = { ...this.user };
     // fetch('http://practic/src/api/GetAllCategories.php', {
     //   method: 'GET',

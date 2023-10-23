@@ -9,7 +9,7 @@
         </div>
         <div class="form-group">
           <p>Оценка</p>
-<!--          <Rating :value="rating" @input="updateRating" />-->
+          <Rating :value="rating" @input="updateRating" />
         </div>
         <div class="form-group">
           <label for="title">Заголовок</label>
@@ -58,11 +58,11 @@
 </template>
 
 <script>
-// import Rating from '@/components/Rating.vue'
+import Rating from '@/components/Rating.vue'
 export default {
   name: 'ReviewPage',
   components: {
-    // Rating
+    Rating
   },
   data() {
     return {
@@ -143,9 +143,9 @@ export default {
   },
   mounted() {
     if (localStorage.getItem('user')) {
-      const user = JSON.parse(localStorage.getItem('user'))[0];
-      this.id_user = user.client_id;
-      this.user_name = user.client_name;
+      const user = JSON.parse(localStorage.getItem('user'));
+      this.id_user = user.id;
+      this.user_name = user.name;
       this.admin = user.admin;
     }
   }

@@ -4,7 +4,8 @@
       <h2>Детали мероприятия</h2>
       <div class="event-info" v-if="event">
         <div class="event-title">{{ event.title }}</div>
-        <img :src="event.image" alt="Event Image" />
+        <img :src="'src/assets/img/Services/' + event.img" alt="Event Image" />
+
         <p>{{ event.description }}</p>
       </div>
       <div class="" v-else>Загрузка...</div>
@@ -16,62 +17,64 @@
     <!--  Музыка: заказчик может выбрать музыку из списка доступных вариантов или заказать услуги диджея или группы.-->
     <!--  Трансфер: заказчик может заказать трансфер для гостей.-->
     <!--  Фото и видеосъемка: заказчик может заказать фото и видеосъемку мероприятия.-->
-    <div id="app">
-      <div class="event-parameter">
-        <label for="menu">Количество человек: </label>
-        <p>{{ humanLabel }}</p>
-        <input type="range" min="1" max="5" step="1" v-model="Human_value" name="human_value">
-      </div>
+    <div class="parameters">
+      <div id="app">
+        <div class="event-parameter">
+          <label for="menu">Количество человек: </label>
+          <p>{{ humanLabel }}</p>
+          <input type="range" min="1" max="5" step="1" v-model="Human_value" name="human_value">
+        </div>
 
-      <div class="event-parameter">
-        <label for="menu">Меню:</label>
-        <select v-model="selectedMenu" id="menu">
-          <option value="" disabled selected>Выберите из списка</option>
-          <option v-for="menu in availableMenus" :value="menu">{{ menu }}</option>
-        </select>
-      </div>
+        <div class="event-parameter">
+          <label for="menu">Меню:</label>
+          <select v-model="selectedMenu" id="menu">
+            <option value="" disabled selected>Выберите из списка</option>
+            <option v-for="menu in availableMenus" :value="menu">{{ menu }}</option>
+          </select>
+        </div>
 
-      <div class="event-parameter">
-        <label for="decor">Декор:</label>
-        <select v-model="selectedDecor" id="decor">
-          <option value="" disabled selected>Выберите из списка</option>
-          <option v-for="decor in availableDecors" :value="decor">{{ decor }}</option>
-        </select>
-      </div>
+        <div class="event-parameter">
+          <label for="decor">Декор:</label>
+          <select v-model="selectedDecor" id="decor">
+            <option value="" disabled selected>Выберите из списка</option>
+            <option v-for="decor in availableDecors" :value="decor">{{ decor }}</option>
+          </select>
+        </div>
 
-      <div class="event-parameter">
-        <label for="animators">Аниматоры:</label>
-        <select v-model="selectedAnimators" id="animators">
-          <option value="" disabled selected>Выберите из списка</option>
-          <option v-for="animator in availableAnimators" :value="animator">{{ animator }}</option>
-        </select>
-      </div>
+        <div class="event-parameter">
+          <label for="animators">Аниматоры:</label>
+          <select v-model="selectedAnimators" id="animators">
+            <option value="" disabled selected>Выберите из списка</option>
+            <option v-for="animator in availableAnimators" :value="animator">{{ animator }}</option>
+          </select>
+        </div>
 
-      <div class="event-parameter">
-        <label for="music">Музыка:</label>
-        <select v-model="selectedMusic" id="music">
-          <option value="" disabled selected>Выберите из списка</option>
-          <option v-for="music in availableMusic" :value="music">{{ music }}</option>
-        </select>
-      </div>
+        <div class="event-parameter">
+          <label for="music">Музыка:</label>
+          <select v-model="selectedMusic" id="music">
+            <option value="" disabled selected>Выберите из списка</option>
+            <option v-for="music in availableMusic" :value="music">{{ music }}</option>
+          </select>
+        </div>
 
-      <div class="event-parameter">
-        <label for="transfer">Трансфер:</label>
-        <input type="checkbox" id="transfer" v-model="hasTransfer">
-      </div>
+        <div class="event-parameter">
+          <label for="transfer">Трансфер:</label>
+          <input type="checkbox" id="transfer" v-model="hasTransfer">
+        </div>
 
-      <div class="event-parameter">
-        <label for="photoVideo">Фото и видеосъемка:</label>
-        <input type="checkbox" id="photoVideo" v-model="hasPhotoVideo">
+        <div class="event-parameter">
+          <label for="photoVideo">Фото и видеосъемка:</label>
+          <input type="checkbox" id="photoVideo" v-model="hasPhotoVideo">
+        </div>
       </div>
-    </div>
-    <div class="total_price">
-      <h2>Итоговая цена:</h2>
-      <h1>{{ totalPrice }}</h1>
-    </div>
-    <div class="submit_block">
-      <button class="submit-button" @click="submitApplication">Оформить заявку</button>
-      <div class="error_message" v-if="submit_error !== ''">{{ submit_error }}</div>
+      <div class="total_price">
+        <h2>Итоговая цена:</h2>
+        <h1>{{ totalPrice }}</h1>
+      </div>
+      <div class="submit_block">
+        <button class="submit-button" @click="submitApplication">Оформить заявку</button>
+        <div class="error_message" v-if="submit_error !== ''">{{ submit_error }}</div>
+      </div>
     </div>
   </div>
 
@@ -270,5 +273,9 @@ input[type="checkbox"] {
 
 .submit-button:hover {
   background-color: #0056b3;
+}
+.parameters {
+  max-width: 1080px;
+  margin: 0 auto;
 }
 </style>

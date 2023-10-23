@@ -1,98 +1,109 @@
 <template>
   <div class="slider-container">
-    <div class="slider" :style="{ transform: 'translateX(' + (-currentIndex * 100) + '%)' }">
-      <div v-for="(slide, index) in slides" :key="index" class="slide">
-        <img :src="'src/assets/img/' + slide.image" alt="Slide">
+    <swiper :navigation="true" :modules="modules" class="mySwiper">
+      <swiper-slide
+          v-for="slide in slides"
+          :key="slide.img"
+      >
+        <img :src="slide.img" alt="IMG" />
         <div class="overlay">
-          <span>{{ slide.text }}</span>
+          <span>{{ slide.description }}</span>
         </div>
-      </div>
-    </div>
-    <button @click="prevSlide" class="prev-btn">&#8249;</button>
-    <button @click="nextSlide" class="next-btn">&#8250;</button>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
 <script>
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+// import required modules
+import { Navigation } from 'swiper/modules';
+
 export default {
-  name: "Slider",
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   data() {
     return {
       slides: [
-        { image: 'test.jpg', text: 'Text for slide 1' },
-        { image: 'test2.png', text: 'Text for slide 2' },
-        { image: 'test3.jpg', text: 'Text for slide 3' }
+        { img: 'src/assets/img/Slider/Exhibition.jpg', description: 'Exhibition' },
+        { img: 'src/assets/img/Slider/Marry.jpg', description: 'Marry' },
+        { img: 'src/assets/img/Slider/Rock.jpg', description: 'Rock' },
       ],
-      currentIndex: 0
     };
   },
-  methods: {
-    prevSlide() {
-      this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-    },
-    nextSlide() {
-      this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-    }
-  }
+  setup() {
+    return {
+      modules: [Navigation],
+    };
+  },
 };
 </script>
 
-<style scoped>
+<style style="">
+#app {
+  height: 100%;
+}
+html,
+body {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  /*background: #eee;*/
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 90%;
+  height: 600px;
+  object-fit: cover;
+}
 .slider-container {
   position: relative;
   overflow: hidden;
 }
 
-.slider {
-  display: flex;
-  transition: transform 0.3s ease;
-  overflow: hidden;
-}
-
-.slide {
-  position: relative;
-  width: 70%;
-  height: 500px;
-  display: flex;
-  justify-content: center;
-}
-
-img {
-  width: 100%;
-  height: auto;
-}
-
 .overlay {
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 100%;
+  /*left: 0;*/
+  width: 90%;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   color: white;
 }
 
 .overlay span {
   font-size: 18px;
-}
-
-.prev-btn, .next-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.prev-btn {
-  left: 0;
-}
-
-.next-btn {
-  right: 0;
 }
 </style>

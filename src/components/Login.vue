@@ -40,7 +40,7 @@ export default {
             if (typeof data === 'string') {
               alert(data);
             } else if (Array.isArray(data)) {
-              localStorage.setItem('user', JSON.stringify(data));
+              localStorage.setItem('user', JSON.stringify(data[0]));
               // this.$router.push('/profile');
             }
           })

@@ -8,7 +8,7 @@
           @click="onItemClick(service.id)"
       >
           <div class="service_title">{{ service.title }}</div>
-          <img :src="'src/assets/img/' + service.img" alt="Service Image" />
+          <img :src="'src/assets/img/Services/' + service.img" alt="Service Image" />
           <div class="description">
             <div class="overlay"></div>
             <p>{{ service.description }}</p>
