@@ -4,8 +4,7 @@
       <h2>Детали мероприятия</h2>
       <div class="event-info" v-if="event">
         <div class="event-title">{{ event.title }}</div>
-        <img :src="'src/assets/img/Services/' + event.img" alt="Event Image" />
-
+        <img :src="'../src/assets/img/Services/' + event.img" :alt="event.img" />
         <p>{{ event.description }}</p>
       </div>
       <div class="" v-else>Загрузка...</div>
@@ -208,7 +207,8 @@ export default {
 
 <style scoped>
 .event-details {
-  max-width: 800px;
+  max-width: 1080px;
+
   margin: 0 auto;
   padding: 20px;
 }
@@ -243,6 +243,7 @@ export default {
 
 label {
   font-weight: bold;
+  font-size: 18px;
 }
 
 select, input[type="checkbox"] {
@@ -260,6 +261,9 @@ input[type="checkbox"] {
   width: auto;
   margin-right: 5px;
 }
+.submit_block {
+  margin: 0 0 50px 0;
+}
 .submit-button {
   background-color: #007BFF;
   color: #fff;
@@ -275,7 +279,13 @@ input[type="checkbox"] {
   background-color: #0056b3;
 }
 .parameters {
-  max-width: 1080px;
+  max-width: 720px;
   margin: 0 auto;
+}
+.event-info img {
+  height: 500px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 15px;
 }
 </style>

@@ -11,7 +11,7 @@
         </ul>
 
 
-      <button @click="handleSelect">Выбрать</button>
+      <router-link to="/services" class="button">Выбрать</router-link>
     </div>
   </div>
 </template>
@@ -50,7 +50,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #f9f9f9;
-  margin: 0 auto;
+  margin: 50px auto;
 }
 
 .button {
@@ -62,6 +62,7 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  text-decoration: none;
 }
 
 .button:hover {
