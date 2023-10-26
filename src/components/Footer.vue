@@ -37,7 +37,7 @@ export default {
 .footer {
   background-color: #333;
   color: #fff;
-  padding: 40px 0 20px 0;
+  padding: 20px 0 10px 0;
 }
 
 .footer-content {
@@ -51,7 +51,7 @@ export default {
 .footer-column {
   flex: 1 1 300px;
   max-width: 400px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .footer-heading {

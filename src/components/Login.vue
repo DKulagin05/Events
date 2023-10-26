@@ -41,7 +41,8 @@ export default {
               alert(data);
             } else if (Array.isArray(data)) {
               localStorage.setItem('user', JSON.stringify(data[0]));
-              // this.$router.push('/profile');
+              this.$router.push('/profile');
+              // window.location.reload();
             }
           })
           .catch(error => console.error(error));

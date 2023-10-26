@@ -14,7 +14,7 @@
         <li v-if="user"><router-link to="/auth">Авторизация/регистрация</router-link></li>
 <!--        <li v-if="user.admin === '1'"><router-link to="/admin">Админ панель</router-link></li>-->
         <li v-if="!user"><router-link to="/profile">Профиль</router-link></li>
-        <li v-if="user"><router-link to="/logout">Выйти</router-link></li>
+        <li v-if="!user"><router-link to="/logout">Выйти</router-link></li>
       </ul>
     </nav>
   </header>
@@ -24,7 +24,7 @@
 export default {
   data() {
     return {
-      user: false,
+      user: true,
       isNavOpen: false,
       isMobile: false
     };

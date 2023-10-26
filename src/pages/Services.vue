@@ -1,28 +1,37 @@
 <template>
   <div class="wrapper">
-    <div class="services_list">
-      <div
-          class="service-item"
-          v-for="service in services"
-          :key="service.id"
-          @click="onItemClick(service.id)"
-      >
+    <div class="service_header">
+      <h1>Выберите мероприяите из предложенных</h1>
+      <h2>Или создайте свое <router-link to="/CreateForm">Создать</router-link></h2>
+    </div>
+
+    <div style="margin-bottom: 50px;">
+      <div class="selects" >
+        <div class="" v-for="category in categories" >
+          <div class="input_label_box">
+            <input type="radio" name="selectConstructor" :id="category.id" :value="category.id" v-model="selectedOption">
+            <label :for="category.id">{{ category.name }}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="services_list">
+        <div
+            class="service-item"
+            v-for="service in services"
+            :key="service.id"
+            @click="onItemClick(service.id)"
+        >
           <div class="service_title">{{ service.title }}</div>
           <img :src="'src/assets/img/Services/' + service.img" alt="Service Image" />
           <div class="description">
             <div class="overlay"></div>
             <p>{{ service.description }}</p>
           </div>
-
-
-<!--        Тематическая свадьба: стоимость создания темы свадьбы может составлять от 10000 до 50000 рублей.-->
-<!--        Детский праздник: стоимость меню для детского праздника может составлять от 500 рублей на ребенка.-->
-<!--        Корпоративный вечер: стоимость декора для корпоративного вечера может составлять от 10000 рублей.-->
-<!--        Новогодний корпоратив: стоимость услуг аниматоров для новогоднего корпоратива может составлять от 10000 рублей за вечер.-->
-<!--        Юбилей: стоимость трансфера для гостей юбилея может составлять от 10000 рублей.-->
-<!--        Свадебная фотосессия: стоимость свадебной фотосессии может составлять от 20000 рублей.-->
-
+        </div>
       </div>
+      <div style="text-align: center; font-size: 32px" v-if="selectedOption === null">Выберите категорию</div>
+
     </div>
   </div>
 </template>
@@ -33,26 +42,9 @@ export default {
   name: "Services",
   data() {
     return {
-      services: [
-        {
-          id: 1,
-          image: 'test.jpg',
-          title: 'Организация свадьбы',
-          description: 'Мы поможем вам организовать свадьбу вашей мечты!',
-        },
-        {
-          id: 2,
-          image: 'test2.png',
-          title: 'Организация корпоративного мероприятия',
-          description: 'Мы организуем корпоративное мероприятие, которое запомнится вашим сотрудникам!',
-        },
-        {
-          id: 3,
-          image: 'test3.jpg',
-          title: 'Организация детского праздника',
-          description: 'Мы поможем вам организовать детский праздник, который понравится вашему ребенку!',
-        },
-      ],
+      selectedOption: null,
+      categories: [],
+      services: [],
     };
   },
   methods: {
@@ -61,13 +53,37 @@ export default {
       this.$router.push(`/event/${id}`);
     },
   },
+  watch: {
+    selectedOption() {
+      fetch('http://EventServer/GetCategory.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: this.selectedOption
+        })
+      })
+          .then(response => response.json())
+          .then(data => {
+            this.services = data
+          })
+          .catch(error => console.error(error));
+    }
+  },
   created() {
-    fetch('http://EventServer/GetAllServices.php', {
+    // fetch('http://EventServer/GetAllServices.php', {
+    //   method: 'GET',
+    // })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       this.services = data
+    //     })
+    //     .catch((error) => console.error(error));
+
+    fetch('http://EventServer/GetAllCategories.php', {
       method: 'GET',
     })
         .then((response) => response.json())
         .then((data) => {
-          this.services = data
+          this.categories = data
         })
         .catch((error) => console.error(error));
   }
@@ -125,5 +141,31 @@ img {
 
 .service-item:hover .overlay {
   background: rgba(0, 0, 0, 0.3);
+}
+
+
+.selects {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  border: 1px solid #00BFFF;
+  padding: 15px;
+}
+
+/* Стили для активного состояния input radio */
+input[type="radio"]:checked + label {
+  background-color: #00BFFF;
+}
+
+label:hover {
+  cursor: pointer;
 }
 </style>

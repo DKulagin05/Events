@@ -1,110 +1,162 @@
 <template>
   <div class="wrapper">
-    <div class="event-details" >
+    <div class="event-details">
       <h2>Детали мероприятия</h2>
       <div class="event-info" v-if="event">
         <div class="event-title">{{ event.title }}</div>
         <img :src="'../src/assets/img/Services/' + event.img" :alt="event.img" />
-        <p>{{ event.description }}</p>
+        <div class="event-description">
+          <h1>Описание мероприятия</h1>
+          <p>{{ event.description }}</p>
+        </div>
       </div>
       <div class="" v-else>Загрузка...</div>
     </div>
 
-    <!--  Меню: заказчик может выбрать меню из списка доступных вариантов.-->
-    <!--  Декор: заказчик может выбрать декор из списка доступных вариантов или заказать индивидуальный дизайн.-->
-    <!--  Аниматоры: заказчик может выбрать аниматоров из списка доступных вариантов или заказать услуги отдельной компании.-->
-    <!--  Музыка: заказчик может выбрать музыку из списка доступных вариантов или заказать услуги диджея или группы.-->
-    <!--  Трансфер: заказчик может заказать трансфер для гостей.-->
-    <!--  Фото и видеосъемка: заказчик может заказать фото и видеосъемку мероприятия.-->
     <div class="parameters">
-      <div id="app">
-        <div class="event-parameter">
-          <label for="menu">Количество человек: </label>
-          <p>{{ humanLabel }}</p>
-          <input type="range" min="1" max="5" step="1" v-model="Human_value" name="human_value">
-        </div>
-
-        <div class="event-parameter">
-          <label for="menu">Меню:</label>
-          <select v-model="selectedMenu" id="menu">
-            <option value="" disabled selected>Выберите из списка</option>
-            <option v-for="menu in availableMenus" :value="menu">{{ menu }}</option>
-          </select>
-        </div>
-
-        <div class="event-parameter">
-          <label for="decor">Декор:</label>
-          <select v-model="selectedDecor" id="decor">
-            <option value="" disabled selected>Выберите из списка</option>
-            <option v-for="decor in availableDecors" :value="decor">{{ decor }}</option>
-          </select>
-        </div>
-
-        <div class="event-parameter">
-          <label for="animators">Аниматоры:</label>
-          <select v-model="selectedAnimators" id="animators">
-            <option value="" disabled selected>Выберите из списка</option>
-            <option v-for="animator in availableAnimators" :value="animator">{{ animator }}</option>
-          </select>
-        </div>
-
-        <div class="event-parameter">
-          <label for="music">Музыка:</label>
-          <select v-model="selectedMusic" id="music">
-            <option value="" disabled selected>Выберите из списка</option>
-            <option v-for="music in availableMusic" :value="music">{{ music }}</option>
-          </select>
-        </div>
-
-        <div class="event-parameter">
-          <label for="transfer">Трансфер:</label>
-          <input type="checkbox" id="transfer" v-model="hasTransfer">
-        </div>
-
-        <div class="event-parameter">
-          <label for="photoVideo">Фото и видеосъемка:</label>
-          <input type="checkbox" id="photoVideo" v-model="hasPhotoVideo">
-        </div>
+      <div class="parameters_style">
+        <service-selection
+            v-for="category in serviceCategories"
+            :key="category.category"
+            :category="category.category"
+            :services="category.services"
+            v-model="category.services"
+            @change="handleSelectionChanged"
+        ></service-selection>
       </div>
+      <button @click="showSelectedServices">Показать выбранные услуги</button>
+
+<!--      <div class="event-parameter">-->
+<!--        <label for="transfer">Трансфер:</label>-->
+<!--        <input type="checkbox" id="transfer" v-model="hasTransfer">-->
+<!--      </div>-->
+
+<!--      <div class="event-parameter">-->
+<!--        <label for="food">Еда/напитки:</label>-->
+<!--        <input type a="checkbox" id="food" v-model="hasFood">-->
+<!--      </div>-->
+
+<!--      <div class="event-parameter">-->
+<!--        <label for="photoVideo">Фото и видеосъемка:</label>-->
+<!--        <input type="checkbox" id="photoVideo" v-model="hasPhotoVideo">-->
+<!--      </div>-->
       <div class="total_price">
-        <h2>Итоговая цена:</h2>
+        <h2>Примерная цена:</h2>
         <h1>{{ totalPrice }}</h1>
       </div>
+
       <div class="submit_block">
         <button class="submit-button" @click="submitApplication">Оформить заявку</button>
         <div class="error_message" v-if="submit_error !== ''">{{ submit_error }}</div>
       </div>
     </div>
-  </div>
 
+
+  </div>
 </template>
 
 <script>
+import ServiceSelection from "../components/ServiceSelection.vue";
+
 export default {
+  components: {
+    'service-selection': ServiceSelection,
+  },
   name: "EventDetails",
   data() {
     return {
-      event: null, // Здесь будет храниться информация о мероприятии
-      selectedMenu: "",
-      selectedDecor: "",
-      selectedAnimators: "",
-      selectedMusic: "",
+      user: null,
+      event: null,
       submit_error: '',
       hasTransfer: false,
+      hasFood: false,
       hasPhotoVideo: false,
-      availableMenus: ["Меню 1", "Меню 2", "Меню 3", "Без меню"],
-      availableDecors: ["Декор 1", "Декор 2", "Декор 3", "Без декора"],
-      availableAnimators: ["Аниматоры 1", "Аниматоры 2", "Аниматоры 3", "Без аниматоров"],
-      availableMusic: ["Музыка 1", "Музыка 2", "Музыка 3", "Без музыки"],
       price: 0,
       totalPrice: 0,
-      humanLabel: 'До 15 человек',
-      Human_value: 1,
+      serviceCategories: [
+        {
+          category: 'Услуги по оформлению и декорированию:',
+          services: [
+            { name: 'Дизайн декора и цветов', selected: false },
+            { name: 'Аренда мебели и аксессуаров', selected: false },
+            { name: 'Создание тематических концепций', selected: false },
+          ],
+        },
+        {
+          category: 'Техническое оборудование и аудиовизуальные услуги:',
+          services: [
+            { name: 'Аренда аудио- и видеооборудования', selected: false },
+            { name: 'Техническая поддержка и обслуживание', selected: false },
+          ],
+        },
+        {
+          category: 'Услуги кейтеринга и обслуживания:',
+          services: [
+            { name: 'Кейтеринг для питания гостей', selected: false },
+            { name: 'Обслуживание бара и напитков', selected: false },
+            { name: 'Персонал для обслуживания гостей', selected: false },
+          ],
+        },
+        {
+          category: 'Продвижение и маркетинг:',
+          services: [
+            { name: 'Продвижение и маркетинг', selected: false },
+            { name: 'Фото- и видеосъемка события', selected: false },
+          ],
+        },
+        {
+          category: 'Услуги безопасности и медицинская помощь:',
+          services: [
+            { name: 'Услуги охраны и безопасности', selected: false },
+            { name: 'Медицинская служба и скорая помощь', selected: false },
+          ],
+        },
+        {
+          category: 'Интерактивные развлечения и анимация:',
+          services: [
+            { name: 'Профессиональные аниматоры и ведущие', selected: false },
+            { name: 'Организация аркадных игр и развлечений', selected: false },
+          ],
+        },
+        {
+          category: 'Услуги трансляции и онлайн-присутствие:',
+          services: [
+            { name: 'Организация видеотрансляции события', selected: false },
+            { name: 'Виртуальная площадка для участников в онлайн-режиме', selected: false },
+          ],
+        },
+        // Добавьте аналогичные категории
+      ],
+      selectedServices: [],
     };
   },
+  methods: {
+    handleSelectionChanged() {
+      this.selectedServices = this.serviceCategories
+          .flatMap(category => category.services.filter(service => service.selected))
+          .map(service => service.name);
+    },
+    showSelectedServices() {
+      // alert('Выбранные услуги: ' + this.selectedServices.join(', '));
+      console.log(this.selectedServices)
+    },
+    submitApplication() {
+      if (this.user === null) {
+        this.submit_error = "Необходимо войти в аккаунт";
+      } else {
+        alert("Заявка успешно создана");
+      }
+    },
+  },
+  computed: {
+    totalPrice() {
+      let add = parseInt(this.event.price);
+      add += this.selectedServices.length * 5000
+      // Добавьте другие вычисления для цены
+      return add;
+    },
+  },
   created() {
-    // В этом хуке вы можете получить информацию о мероприятии по его ID
-    // Например, вы можете использовать axios или другую библиотеку для выполнения запроса к API
     const eventId = this.$route.params.id; // Получаем ID из URL
 
     // Здесь выполните запрос к вашему API для получения информации о мероприятии по eventId
@@ -117,91 +169,15 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.event = data[0]
-          console.log(this.event)
         })
         .catch(error => console.error(error));
 
-    // В этом примере данные о мероприятии предполагаются статическими:
-
   },
-  methods: {
-    submitApplication() {
-      if (
-          this.selectedMenu === "Без меню" &&
-          this.selectedDecor === "Без декора" &&
-          this.selectedAnimators === "Без аниматоров" &&
-          this.selectedMusic === "Без музыки" &&
-          !this.hasTransfer &&
-          !this.hasPhotoVideo
-      ) {
-        this.submit_error = "Необходимо выбрать хоть что-то";
-      } else {
-        console.log("Заявка успешно создана");
-      }
-    },
-    // updateHumanLabel() {
-    //
-    //   switch (this.Human_value) {
-    //     case '1':
-    //       this.humanLabel = 'До 15 человек';
-    //       break;
-    //     case '2':
-    //       this.humanLabel = '50-100 человек';
-    //       break;
-    //     case '3':
-    //       this.humanLabel = '100-150 человек';
-    //       break;
-    //     case '4':
-    //       this.humanLabel = '150-200 человек';
-    //       break;
-    //     case '5':
-    //       this.humanLabel = 'Более 200 человек';
-    //       break;
-    //   }
-    // },
-    // Добавьте методы для других параметров мероприятия
-  },
-  computed: {
-    totalPrice() {
-      let add = 0;
-      if (this.selectedMenu !== "" && this.selectedMenu !== "Без меню") add += 15000;
-      if (this.selectedDecor !== "" && this.selectedDecor !== "Без декора") add += 25000;
-      if (this.selectedAnimators !== "" && this.selectedAnimators !== "Без аниматоров") add += 10000;
-      if (this.selectedMusic !== "" && this.selectedMusic !== "Без музыки") add += 1500;
-      if (this.hasTransfer) add += 10000;
-      if (this.hasPhotoVideo) add += 5000;
-      if (this.humanLabel) add += parseInt(this.Human_value) * 5000;
-
-      return add;
-    },
-    humanLabel() {
-      let label = '';
-      switch (this.Human_value) {
-        case '1':
-          label = "До 50 человек";
-          break;
-        case '2':
-          label = "50-100 человек";
-          break;
-        case '3':
-          label = "100-150 человек";
-          break;
-        case '4':
-          label = "150-200 человек";
-          break;
-        case '5':
-          label = "Более 200 человек";
-          break;
-        default:
-          label = "До 50 человек";
-      }
-      return label;
-    },
-  },
-  watch: {
-
-  },
-
+  mounted() {
+    if (localStorage.getItem('user')) {
+      this.user = JSON.parse(localStorage.getItem('user'))[0];
+    }
+  }
 };
 </script>
 
@@ -232,7 +208,11 @@ export default {
   max-width: 100%;
   margin: 10px 0;
 }
-
+.parameters_style {
+  display: grid;
+  grid-template-columns: repeat(2, 0.5fr);
+  gap: 20px;
+}
 .event-description {
   font-size: 16px;
 }
@@ -279,7 +259,7 @@ input[type="checkbox"] {
   background-color: #0056b3;
 }
 .parameters {
-  max-width: 720px;
+  max-width: 920px;
   margin: 0 auto;
 }
 .event-info img {
@@ -288,4 +268,5 @@ input[type="checkbox"] {
   overflow: hidden;
   border-radius: 15px;
 }
+
 </style>

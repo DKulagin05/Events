@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-.name_company {
+.Name_company {
   color: black;
   text-align: center;
   font-size: 48px;

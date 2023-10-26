@@ -56,7 +56,7 @@ export default {
         name: 'user',
         surname: 'surname',
         email: 'email',
-        phone: 123,
+        phone: 8123456789,
       },
       editedUser: {},
       CategoryArray: [

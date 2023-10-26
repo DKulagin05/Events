@@ -16,4 +16,8 @@ main {
   margin: 0 auto;
 }
 
+textarea {
+  resize: none;
+}
+
 /*# sourceMappingURL=Main.css.map */

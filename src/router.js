@@ -7,6 +7,7 @@ import Reviews from "./pages/Reviews.vue";
 import Services from "./pages/Services.vue";
 import EventDetails from "./pages/EventDetails.vue";
 import Logout from "./pages/Logout.vue";
+import CreateEventForm from "./pages/CreateEventForm.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +52,11 @@ const router = createRouter({
             path: '/logout',
             name: 'logout',
             component: Logout
+        },
+        {
+            path: '/CreateForm',
+            name: 'CreateForm',
+            component: CreateEventForm
         },
     ]
 });
