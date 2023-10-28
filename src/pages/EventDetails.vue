@@ -169,8 +169,8 @@ export default {
               .then(response => response.json())
               .then(data => {
                 alert(data);
-                console.log(data)
-                // this.$router.push('/profile')
+                // console.log(data)
+                this.$router.push('/profile')
               })
               .catch(error => console.error(error));
         }

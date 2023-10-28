@@ -103,40 +103,41 @@ export default {
       const options = { year: "numeric", month: "long", day: "numeric" };
       return new Date(date).toLocaleDateString("ru-RU", options);
     },
+
     submitForm() {
       // Отправить данные нового отзыва на сервер, обновить список отзывов
-      // fetch('http://practic/src/api/CreateReview.php', {
-      //   method: 'POST',
-      //   body: JSON.stringify({
-      //     id_user: this.id_user,
-      //     user_name: this.user_name,
-      //     title: this.title,
-      //     description: this.description,
-      //     rating: parseInt(this.rating)
-      //   }),
-      // })
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       alert(data)
-      //       location.reload();
-      //     })
-      //     .catch((error) => console.error(error));
+      fetch('http://EventServer/CreateReview.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          id_user: this.id_user,
+          user_name: this.user_name,
+          title: this.title,
+          description: this.description,
+          rating: parseInt(this.rating)
+        }),
+      })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data)
+            location.reload();
+          })
+          .catch((error) => console.error(error));
     },
     removeReview(remove_id,remove_title) {
       console.log(this.rating)
       if(confirm('Вы уверены, что хотите удалить отзыв "' + remove_title + '"')) {
-        // fetch('http://practic/src/api/RemoveReview.php', {
-        //   method: 'POST',
-        //   body: JSON.stringify({
-        //     remove_id: remove_id
-        //   }),
-        // })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //       alert(data)
-        //       location.reload();
-        //     })
-        //     .catch((error) => console.error(error));
+        fetch('http://EventServer/RemoveReview.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            remove_id: remove_id
+          }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+              alert(data)
+              location.reload();
+            })
+            .catch((error) => console.error(error));
       }
     },
 
@@ -148,6 +149,14 @@ export default {
       this.user_name = user.name;
       this.admin = user.admin;
     }
+    fetch('http://EventServer/GetAllReviews.php', {
+      method: 'GET',
+    })
+        .then((response) => response.json())
+        .then((data) => {
+          this.reviews = data
+        })
+        .catch((error) => console.error(error));
   }
 };
 </script>
@@ -177,11 +186,13 @@ export default {
 
 .name {
   font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 20px;
+  margin: 0;
 }
 .review_head {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .review_delete {
   display: flex;
@@ -215,7 +226,8 @@ form button[type="submit"] {
 }
 .title {
   font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 18px;
+  margin: 0 0 10px 0;
 }
 .rating {
   font-size: 18px;
@@ -225,6 +237,7 @@ form button[type="submit"] {
 
 .description {
   margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .no-reviews {
