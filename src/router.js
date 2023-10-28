@@ -8,6 +8,7 @@ import Services from "./pages/Services.vue";
 import EventDetails from "./pages/EventDetails.vue";
 import Logout from "./pages/Logout.vue";
 import CreateEventForm from "./pages/CreateEventForm.vue";
+import AdminPage from "./pages/AdminPage.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,11 @@ const router = createRouter({
             path: '/CreateForm',
             name: 'CreateForm',
             component: CreateEventForm
+        },
+        {
+            path: '/admin',
+            name: 'AdminPage',
+            component: AdminPage
         },
     ]
 });

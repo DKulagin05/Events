@@ -24,25 +24,20 @@
             @change="handleSelectionChanged"
         ></service-selection>
       </div>
-      <button @click="showSelectedServices">Показать выбранные услуги</button>
+<!--      <button @click="showSelectedServices">Показать выбранные услуги</button>-->
+      <div class="event_place event-parameter">
+        <label for="place">Адрес проведения мероприятия</label>
+        <input type="text" id="place" placeholder="ул. Примерная д. 8 кв. 12" v-model="event_place">
+      </div>
+      <div class="event_date event-parameter">
+        <label for="date">Дата проведения мероприятия</label>
+        <input type="date" id="date" v-model="event_date" @change="checkDate()">
+        <div class="error_message" v-if="date_error !== ''">{{ date_error }}</div>
+      </div>
 
-<!--      <div class="event-parameter">-->
-<!--        <label for="transfer">Трансфер:</label>-->
-<!--        <input type="checkbox" id="transfer" v-model="hasTransfer">-->
-<!--      </div>-->
-
-<!--      <div class="event-parameter">-->
-<!--        <label for="food">Еда/напитки:</label>-->
-<!--        <input type a="checkbox" id="food" v-model="hasFood">-->
-<!--      </div>-->
-
-<!--      <div class="event-parameter">-->
-<!--        <label for="photoVideo">Фото и видеосъемка:</label>-->
-<!--        <input type="checkbox" id="photoVideo" v-model="hasPhotoVideo">-->
-<!--      </div>-->
       <div class="total_price">
         <h2>Примерная цена:</h2>
-        <h1>{{ totalPrice }}</h1>
+        <h1>{{ totalPrice }} р</h1>
       </div>
 
       <div class="submit_block">
@@ -68,11 +63,12 @@ export default {
       user: null,
       event: null,
       submit_error: '',
-      hasTransfer: false,
-      hasFood: false,
-      hasPhotoVideo: false,
+      date_error: '',
+      event_id: 0,
       price: 0,
       totalPrice: 0,
+      event_place: '',
+      event_date: null,
       serviceCategories: [
         {
           category: 'Услуги по оформлению и декорированию:',
@@ -131,34 +127,71 @@ export default {
     };
   },
   methods: {
+    checkDate() {
+      const currentDate = new Date()
+      currentDate.setDate(currentDate.getDate() + 7);
+      const checkEventDate = new Date(this.event_date)
+      if (checkEventDate < currentDate) {
+        this.date_error = "Дата должна быть выбрана минимум за неделю!";
+      } else {
+        this.date_error = ""
+      }
+    },
     handleSelectionChanged() {
       this.selectedServices = this.serviceCategories
           .flatMap(category => category.services.filter(service => service.selected))
           .map(service => service.name);
     },
     showSelectedServices() {
-      // alert('Выбранные услуги: ' + this.selectedServices.join(', '));
+      // alert('Выбранные услуги: ' + );
       console.log(this.selectedServices)
     },
     submitApplication() {
       if (this.user === null) {
         this.submit_error = "Необходимо войти в аккаунт";
       } else {
-        alert("Заявка успешно создана");
+        if (this.event_place === '') {
+          this.submit_error = "Укажите адрес мероприятия";
+        } else if (this.event_date === null){
+          this.submit_error = "Укажите дату мероприятия";
+        } else {
+          fetch('http://EventServer/CreateOrder.php', {
+            method: 'POST',
+            body: JSON.stringify({
+              id_user: this.user.id,
+              id_event: this.event_id,
+              date: this.event_date,
+              place: this.event_place,
+              price: this.totalPrice,
+              additional: this.selectedServices.join(', ')
+            })
+          })
+              .then(response => response.json())
+              .then(data => {
+                alert(data);
+                console.log(data)
+                // this.$router.push('/profile')
+              })
+              .catch(error => console.error(error));
+        }
       }
     },
   },
   computed: {
     totalPrice() {
-      let add = parseInt(this.event.price);
-      add += this.selectedServices.length * 5000
-      // Добавьте другие вычисления для цены
-      return add;
+      if (this.event) {
+        let add = parseInt(this.event.price);
+        add += this.selectedServices.length * 5000
+        // Добавьте другие вычисления для цены
+        this.totalPrice = add;
+        return add;
+      } else return 0;
+
     },
   },
   created() {
     const eventId = this.$route.params.id; // Получаем ID из URL
-
+    this.event_id = eventId;
     // Здесь выполните запрос к вашему API для получения информации о мероприятии по eventId
     fetch('http://EventServer/GetService.php', {
       method: 'POST',
@@ -175,7 +208,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem('user')) {
-      this.user = JSON.parse(localStorage.getItem('user'))[0];
+      this.user = JSON.parse(localStorage.getItem('user'));
     }
   }
 };
@@ -220,7 +253,26 @@ export default {
 .event-parameter {
   margin-top: 20px;
 }
-
+.event_place {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.event_place input {
+  height: 40px;
+  padding: 5px 10px;
+  /*opacity: 0.8;*/
+}
+.event_date {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.event_date input {
+  height: 40px;
+  padding: 5px 10px;
+  max-width: 130px;
+}
 label {
   font-weight: bold;
   font-size: 18px;

@@ -32,10 +32,12 @@
           </div>
         </div>
         <h3>Ваши заказы:</h3>
-        <div class="orders" v-if="userOrders.length > 0">
+        <div class="orders" v-if="orders.length > 0">
           <ul style="display:flex; flex-direction: column; gap: 20px; font-size: 18px;">
             <li v-for="order in orders" :key="order.id" style="">
-              <!--            {{ order.id }} - {{ order.date }} - {{ order.title }} - {{ order.destination }} - {{ order.total_price }} руб. - {{ checkStatus(order.end_date) }}-->
+                          <h3>{{ order.date }} - {{ order.event_title }} - {{ order.place }} - {{ order.price }} руб. - <span style="border-bottom: 1px solid brown">{{ order.status_title }}</span>
+              <button v-if="order.status_title === 'В обработке'" @click="CancelOrder(order.id)">Отменить</button></h3>
+                          Заказанные услуги: {{ order.additional }}
             </li>
           </ul>
         </div>
@@ -51,7 +53,6 @@ export default {
   name: 'UserProfile',
   data() {
     return {
-      userOrders: [],
       user: {
         name: 'user',
         surname: 'surname',
@@ -72,16 +73,21 @@ export default {
     },
   },
   methods: {
-    checkStatus(date) {
-      const objectDate = new Date(date);
-      const currentDate = new Date();
-
-      if (objectDate < currentDate) {
-        return 'Завершен';
-      } else {
-        return 'В процессе';
+    CancelOrder(id) {
+      if (confirm('Вы уверены что хотите отменить мероприятие?')) {
+        alert("Куда?" + id)
       }
     },
+    // checkStatus(date) {
+    //   const objectDate = new Date(date);
+    //   const currentDate = new Date();
+    //
+    //   if (objectDate < currentDate) {
+    //     return 'Завершен';
+    //   } else {
+    //     return 'В процессе';
+    //   }
+    // },
     toggleEditMode() {
       this.editMode = !this.editMode;
       this.editedUser = { ...this.user };
@@ -125,32 +131,34 @@ export default {
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem('user'));
-    // this.editedUser = { ...this.user };
-    // fetch('http://practic/src/api/GetAllCategories.php', {
-    //   method: 'GET',
-    // })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       this.CategoryArray = data;
-    //     })
-    //     .catch(error => console.error(error));
-    //
-    // fetch('http://practic/src/api/GetUserTours.php', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     id_user: this.user.client_id
-    //   })
-    // })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       this.orders = data;
-    //     })
-    //     .catch(error => console.error(error));
+
+    fetch('http://EventServer/GetUserOrders.php', {
+      method: 'POST',
+      body: JSON.stringify({
+        id_user: this.user.id
+      })
+    })
+        .then(response => response.json())
+        .then(data => {
+          this.orders = data;
+        })
+        .catch(error => console.error(error));
   }
 };
 </script>
 
 <style scoped>
+button {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #c73535;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+}
 .container {
   background-color: #f0f5f9; /* Светло-голубой фон контейнера */
   padding: 20px;
