@@ -29,6 +29,12 @@
         <label for="place">Адрес проведения мероприятия</label>
         <input type="text" id="place" placeholder="ул. Примерная д. 8 кв. 12" v-model="event_place">
       </div>
+
+      <div class="event_comment event-parameter">
+        <label for="comment">Добавить комментарий к заявке</label>
+        <textarea  id="comment" placeholder="Хочу чтобы были лебеди!" v-model="event_comment"></textarea>
+      </div>
+
       <div class="event_date event-parameter">
         <label for="date">Дата проведения мероприятия</label>
         <input type="date" id="date" v-model="event_date" @change="checkDate()">
@@ -41,7 +47,7 @@
       </div>
 
       <div class="submit_block">
-        <button class="submit-button" @click="submitApplication">Оформить заявку</button>
+        <button class="Usually_Button" @click="submitApplication">Оформить заявку</button>
         <div class="error_message" v-if="submit_error !== ''">{{ submit_error }}</div>
       </div>
     </div>
@@ -64,6 +70,7 @@ export default {
       event: null,
       submit_error: '',
       date_error: '',
+      event_comment: '',
       event_id: 0,
       price: 0,
       totalPrice: 0,
@@ -155,6 +162,7 @@ export default {
         } else if (this.event_date === null){
           this.submit_error = "Укажите дату мероприятия";
         } else {
+          if (this.event_comment === '' ) this.event_comment = "Без комментария"
           fetch('http://EventServer/CreateOrder.php', {
             method: 'POST',
             body: JSON.stringify({
@@ -163,6 +171,7 @@ export default {
               date: this.event_date,
               place: this.event_place,
               price: this.totalPrice,
+              comment: this.event_comment,
               additional: this.selectedServices.join(', ')
             })
           })
@@ -258,6 +267,15 @@ export default {
   gap: 10px;
   flex-direction: column;
 }
+.event_comment {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.event_comment textarea {
+  resize: none;
+  padding: 10px;
+}
 .event_place input {
   height: 40px;
   padding: 5px 10px;
@@ -288,7 +306,9 @@ select, input[type="checkbox"] {
 select {
   background-color: #fff;
 }
-
+.total_price {
+  margin: 20px 0;
+}
 input[type="checkbox"] {
   width: auto;
   margin-right: 5px;

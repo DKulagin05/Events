@@ -21,9 +21,10 @@
       <div class="orders" v-if="orders.length > 0">
         <ul style="display:flex; flex-direction: column; gap: 20px; font-size: 18px;">
           <li v-for="order in orders" :key="order.id"  style="background-color: #96e0fb; border-radius: 15px; padding: 15px;">
-            <h3>{{ order.date }} - {{ order.event_title }} - {{ order.place }} - {{ order.price }} руб. - {{ order.phone }} - <span style="border-bottom: 1px solid brown">{{ order.status_title }}</span>
-              <button v-if="order.status_title === 'В обработке'" @click="CancelOrder(order.id)">Отменить</button></h3>
-            Заказанные услуги: {{ order.additional }}
+            <h3>Id: {{ order.id }} - {{ order.date }} - {{ order.event_title }} - {{ order.place }} - {{ order.price }} руб. - {{ order.phone }}
+              <br><button class="Cancel_Button" @click="CancelOrder(order.id)">Отменить</button> <button class="Accept_Button" @click="ConfirmOrder(order.id)">Подтвердить</button></h3>
+            <h4><strong>Комментарий закачика:</strong> {{ order.comment }}</h4>
+            <h4><strong>Заказанные услуги:</strong> {{ order.additional }}</h4>
           </li>
         </ul>
       </div>
@@ -52,6 +53,40 @@ export default {
     return {
       selectedOption: '',
       orders: [],
+    }
+  },
+  methods: {
+    ConfirmOrder(id){
+      if (confirm('Вы уверены что хотите подтвердить заказ ' + id)) {
+        fetch('http://EventServer/ActionOrder.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            id: id,
+            type: 'Confirm',
+          })
+        })
+            .then(response => response.json())
+            .then(data => {
+              alert("Успешно подтверждено")
+            })
+            .catch(error => console.error(error));
+      }
+    },
+    CancelOrder(id) {
+      if (confirm('Вы уверены что хотите отменить заказ ' + id)) {
+        fetch('http://EventServer/ActionOrder.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            id: id,
+            type: 'Cancel',
+          })
+        })
+            .then(response => response.json())
+            .then(data => {
+              alert("Успешно отменено")
+            })
+            .catch(error => console.error(error));
+      }
     }
   },
   mounted() {
@@ -88,6 +123,10 @@ export default {
 h3 {
   margin-top: 5px;
 }
+h4 {
+  font-weight: normal;
+  margin: 10px;
+}
 .selects {
   display: flex;
   gap: 10px;
@@ -103,7 +142,9 @@ label {
   border: 1px solid #ff4a94;
   padding: 10px;
 }
-
+li {
+  list-style-type: none;
+}
 /* Стили для активного состояния input radio */
 input[type="radio"]:checked + label {
   background-color: #ff4a94;

@@ -19,7 +19,7 @@
           <label for="description">Комментарий</label>
           <textarea id="description" v-model="description" rows="3" cols="30" required></textarea>
         </div>
-        <button type="submit">Отправить отзыв</button>
+        <button type="submit" class="Usually_Button">Отправить отзыв</button>
       </form>
     </div>
     <div class="review_auth_error" v-else>Зарегистрируйтесь или войдите в аккаунт чтобы оставить отзыв</div>
@@ -32,8 +32,8 @@
             <p class="name" style="opacity: 0.2">{{ review.id_user }}</p>
           </div>
           <div class="review_delete">
-            <p class="" v-if="id_user===review.id_user" @click="removeReview(review.id, review.title)">Удалить</p>
-            <p class="" v-if="admin==='1'" @click="removeReview(review.id, review.title)">Удалить (Адм)</p>
+            <p class="Cancel_Button" v-if="id_user===review.id_user" @click="removeReview(review.id, review.title)">Удалить</p>
+            <p class="Cancel_Button" v-if="admin==='1'" @click="removeReview(review.id, review.title)">Удалить (Адм)</p>
           </div>
         </div>
         <div class="review_rating">
@@ -124,7 +124,6 @@ export default {
           .catch((error) => console.error(error));
     },
     removeReview(remove_id,remove_title) {
-      console.log(this.rating)
       if(confirm('Вы уверены, что хотите удалить отзыв "' + remove_title + '"')) {
         fetch('http://EventServer/RemoveReview.php', {
           method: 'POST',
@@ -206,14 +205,6 @@ export default {
 .review_rating img{
   width: 20px;
   height: 20px;
-}
-.review_delete p {
-  cursor: pointer;
-  background: #e53e3e;
-  color: white;
-  font-size: 12px;
-  padding: 5px;
-  border-radius: 5px;
 }
 form button[type="submit"] {
   margin-left: auto;
@@ -303,17 +294,4 @@ textarea {
   resize: vertical;
 }
 
-button {
-  background-color: #4299e1 ;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #328ad7;
-}
 </style>

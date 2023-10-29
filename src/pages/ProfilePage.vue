@@ -15,7 +15,7 @@
 <!--            <li><strong>Дата рождения:</strong> {{ user.birthday ?? 'Неизвестно' }}</li>-->
 <!--            <li><strong>Всего потрачено:</strong> {{ totalSpent }} руб.</li>-->
           </ul>
-          <button class="edit-button" @click="toggleEditMode">Редактировать</button>
+          <button class="Usually_Button" @click="toggleEditMode">Редактировать</button>
         </div>
         <div v-else class="edit-container">
           <label for="name">Имя:</label>
@@ -27,8 +27,8 @@
           <label for="email">Почта:</label>
           <input type="text" id="email" v-model="editedUser.email" required>
           <div class="edit-btn">
-            <button class="save-button" @click="saveChanges">Сохранить</button>
-            <button class="cancel-button" @click="cancelEdit">Отмена</button>
+            <button class="Accept_Button" @click="saveChanges">Сохранить</button>
+            <button class="Cancel_Button" @click="cancelEdit">Отмена</button>
           </div>
         </div>
         <h3>Ваши заказы:</h3>
@@ -36,8 +36,9 @@
           <ul style="display:flex; flex-direction: column; gap: 20px; font-size: 18px;">
             <li v-for="order in orders" :key="order.id" style="">
                           <h3>{{ order.date }} - {{ order.event_title }} - {{ order.place }} - {{ order.price }} руб. - <span style="border-bottom: 1px solid brown">{{ order.status_title }}</span>
-              <button v-if="order.status_title === 'В обработке'" @click="CancelOrder(order.id)">Отменить</button></h3>
-                          Заказанные услуги: {{ order.additional }}
+              <button class="Cancel_Button" v-if="order.status_title === 'В обработке'" @click="CancelOrder(order.id, order.event_title)">Отменить</button></h3>
+                          <h4><strong>Ваш комментарий:</strong> {{ order.comment }}</h4>
+                          <h4><strong>Заказанные услуги:</strong> {{ order.additional }}</h4>
             </li>
           </ul>
         </div>
@@ -73,9 +74,21 @@ export default {
     },
   },
   methods: {
-    CancelOrder(id) {
-      if (confirm('Вы уверены что хотите отменить мероприятие?')) {
-        alert("Куда?" + id)
+    CancelOrder(id, name) {
+      if (confirm('Вы уверены что хотите отменить заказ ' + name)) {
+        fetch('http://EventServer/ActionOrder.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            id: id,
+            type: 'Cancel',
+          })
+        })
+            .then(response => response.json())
+            .then(data => {
+              alert("Успешно отменено")
+              window.location.reload();
+            })
+            .catch(error => console.error(error));
       }
     },
     // checkStatus(date) {
@@ -140,7 +153,7 @@ export default {
     })
         .then(response => response.json())
         .then(data => {
-          this.orders = data;
+          this.orders = data.sort((a, b) => b.id - a.id);
         })
         .catch(error => console.error(error));
   }
@@ -148,17 +161,7 @@ export default {
 </script>
 
 <style scoped>
-button {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #c73535;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  text-decoration: none;
-}
+
 .container {
   background-color: #f0f5f9; /* Светло-голубой фон контейнера */
   padding: 20px;
@@ -196,7 +199,9 @@ p {
 ul {
   margin-left: 20px;
 }
-
+h4 {
+  font-weight: normal;
+}
 .status {
   color: #0066CC;
   font-weight: bold;
@@ -229,16 +234,12 @@ ul {
 
 .edit-btn {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
-.save-button {
-  background-color: #28a745;
-  margin-right: 10px;
-}
-
-.cancel-button {
-  background-color: #dc3545;
+.Usually_Button {
+  font-size: 16px;
+  padding: 5px 10px;
 }
 
 /* Адаптивный дизайн для ширины экрана до 600px */

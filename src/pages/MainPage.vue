@@ -11,7 +11,7 @@
         </ul>
 
 
-      <router-link to="/services" class="button">Выбрать</router-link>
+      <router-link to="/services" class="Usually_Button">Выбрать</router-link>
     </div>
   </div>
 </template>
@@ -39,6 +39,7 @@ export default {
   font-style: italic;
   font-weight: 800;
   line-height: 35px;
+  margin: 50px 0;
   word-wrap: break-word
 }
 .information-window {
@@ -49,19 +50,7 @@ export default {
   margin: 50px auto;
 }
 
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  text-decoration: none;
-}
 
-.button:hover {
-  background-color: #0056b3;
-}
+
+
 </style>

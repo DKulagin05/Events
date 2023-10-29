@@ -17,7 +17,7 @@
       <div class="footer-column">
         <h3 class="footer-heading">Контакты</h3>
         <p><i class="fas fa-map-marker-alt"></i>Адрес: 123 ул. Гостеприимная, Город</p>
-        <p><i class="fas fa-phone"></i>Телефон: +1 234 567 890</p>
+        <p><i class="fas fa-phone"></i>Телефон: +7 (123) 456-78-90</p>
         <p><i class="fas fa-envelope"></i>Email: info@example.com</p>
       </div>
     </div>
