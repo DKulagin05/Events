@@ -4,7 +4,7 @@
       <h2>Детали мероприятия</h2>
       <div class="event-info" v-if="event">
         <div class="event-title">{{ event.title }}</div>
-        <img :src="'../src/assets/img/Services/' + event.img" :alt="event.img" />
+        <img :src="event.img" :alt="event.img" class="correct_img"/>
         <div class="event-description">
           <h1>Описание мероприятия</h1>
           <p>{{ event.description }}</p>
@@ -26,7 +26,7 @@
       </div>
 <!--      <button @click="showSelectedServices">Показать выбранные услуги</button>-->
       <div class="event_place event-parameter">
-        <label for="place">Адрес проведения мероприятия</label>
+        <label for="place">Адрес проведения мероприятия<span class="red">*</span></label>
         <input type="text" id="place" placeholder="ул. Примерная д. 8 кв. 12" v-model="event_place">
       </div>
 
@@ -36,7 +36,7 @@
       </div>
 
       <div class="event_date event-parameter">
-        <label for="date">Дата проведения мероприятия</label>
+        <label for="date">Дата проведения мероприятия<span class="red">*</span></label>
         <input type="date" id="date" v-model="event_date" @change="checkDate()">
         <div class="error_message" v-if="date_error !== ''">{{ date_error }}</div>
       </div>
@@ -76,82 +76,24 @@ export default {
       totalPrice: 0,
       event_place: '',
       event_date: null,
-      serviceCategories: [
-        {
-          category: 'Услуги по оформлению и декорированию:',
-          services: [
-            { name: 'Дизайн декора и цветов', selected: false },
-            { name: 'Аренда мебели и аксессуаров', selected: false },
-            { name: 'Создание тематических концепций', selected: false },
-          ],
-        },
-        {
-          category: 'Техническое оборудование и аудиовизуальные услуги:',
-          services: [
-            { name: 'Аренда аудио- и видеооборудования', selected: false },
-            { name: 'Техническая поддержка и обслуживание', selected: false },
-          ],
-        },
-        {
-          category: 'Услуги кейтеринга и обслуживания:',
-          services: [
-            { name: 'Кейтеринг для питания гостей', selected: false },
-            { name: 'Обслуживание бара и напитков', selected: false },
-            { name: 'Персонал для обслуживания гостей', selected: false },
-          ],
-        },
-        {
-          category: 'Продвижение и маркетинг:',
-          services: [
-            { name: 'Продвижение и маркетинг', selected: false },
-            { name: 'Фото- и видеосъемка события', selected: false },
-          ],
-        },
-        {
-          category: 'Услуги безопасности и медицинская помощь:',
-          services: [
-            { name: 'Услуги охраны и безопасности', selected: false },
-            { name: 'Медицинская служба и скорая помощь', selected: false },
-          ],
-        },
-        {
-          category: 'Интерактивные развлечения и анимация:',
-          services: [
-            { name: 'Профессиональные аниматоры и ведущие', selected: false },
-            { name: 'Организация аркадных игр и развлечений', selected: false },
-          ],
-        },
-        {
-          category: 'Услуги трансляции и онлайн-присутствие:',
-          services: [
-            { name: 'Организация видеотрансляции события', selected: false },
-            { name: 'Виртуальная площадка для участников в онлайн-режиме', selected: false },
-          ],
-        },
-        // Добавьте аналогичные категории
-      ],
+      serviceCategories: [],
       selectedServices: [],
     };
   },
   methods: {
     checkDate() {
       const currentDate = new Date()
-      currentDate.setDate(currentDate.getDate() + 7);
       const checkEventDate = new Date(this.event_date)
-      if (checkEventDate < currentDate) {
+      if (checkEventDate < currentDate.setDate(currentDate.getDate() + 7)) {
         this.date_error = "Дата должна быть выбрана минимум за неделю!";
-      } else {
-        this.date_error = ""
+      } else if (checkEventDate > currentDate.setDate(currentDate.getDate() + 365)) {
+        this.date_error = "Дата должна быть максимум за год"
       }
     },
     handleSelectionChanged() {
       this.selectedServices = this.serviceCategories
           .flatMap(category => category.services.filter(service => service.selected))
           .map(service => service.name);
-    },
-    showSelectedServices() {
-      // alert('Выбранные услуги: ' + );
-      console.log(this.selectedServices)
     },
     submitApplication() {
       if (this.user === null) {
@@ -178,7 +120,6 @@ export default {
               .then(response => response.json())
               .then(data => {
                 alert(data);
-                // console.log(data)
                 this.$router.push('/profile')
               })
               .catch(error => console.error(error));
@@ -211,6 +152,15 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.event = data[0]
+        })
+        .catch(error => console.error(error));
+
+    fetch('http://EventServer/GetAllServices.php', {
+      method: 'GET',
+    })
+        .then(response => response.json())
+        .then(data => {
+          this.serviceCategories = data
         })
         .catch(error => console.error(error));
 

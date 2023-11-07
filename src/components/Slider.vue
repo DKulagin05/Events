@@ -33,9 +33,9 @@ export default {
   data() {
     return {
       slides: [
-        { img: 'src/assets/img/Slider/Exhibition.jpg', description: 'Exhibition' },
-        { img: 'src/assets/img/Slider/Marry.jpg', description: 'Marry' },
-        { img: 'src/assets/img/Slider/Rock.jpg', description: 'Rock' },
+        { img: 'http://EventServer/Img/Slider/Exhibition.jpg', description: 'Exhibition' },
+        { img: 'http://EventServer/Img/Slider/Marry.jpg', description: 'Marry' },
+        { img: 'http://EventServer/Img/Slider/Rock.jpg', description: 'Rock' },
       ],
     };
   },

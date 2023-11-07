@@ -36,7 +36,8 @@
         <ul style="display:flex; flex-direction: column; gap: 20px; font-size: 18px;">
           <li v-for="order in orders" :key="order.id" style="background-color: #96e0fb; border-radius: 15px; padding: 15px;">
             <h3>{{ order.date }} - {{ order.event_title }} - {{ order.place }} - {{ order.price }} руб. - <span style="border-bottom: 1px solid brown">{{ order.status_title }}</span></h3>
-            Заказанные услуги: {{ order.additional }}
+            <h4><strong>Комментарий закачика:</strong> {{ order.comment }}</h4>
+            <h4><strong>Заказанные услуги:</strong> {{ order.additional }}</h4>
           </li>
         </ul>
       </div>
@@ -68,6 +69,7 @@ export default {
             .then(response => response.json())
             .then(data => {
               alert("Успешно подтверждено")
+              window.location.reload();
             })
             .catch(error => console.error(error));
       }
@@ -84,6 +86,7 @@ export default {
             .then(response => response.json())
             .then(data => {
               alert("Успешно отменено")
+              window.location.reload();
             })
             .catch(error => console.error(error));
       }
@@ -100,7 +103,7 @@ export default {
         })
             .then(response => response.json())
             .then(data => {
-              this.orders = data
+              this.orders = data.sort((a, b) => b.id - a.id);
             })
             .catch(error => console.error(error));
       }
@@ -110,7 +113,7 @@ export default {
         })
             .then(response => response.json())
             .then(data => {
-              this.orders = data
+              this.orders = data.sort((a, b) => b.id - a.id);
             })
             .catch(error => console.error(error));
       }

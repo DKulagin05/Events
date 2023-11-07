@@ -219,6 +219,9 @@ textarea {
 button {
   padding:5px 10px;
 }
+.red {
+  color: red;
+}
 .Cancel_Button {
   display: inline-block;
   padding: 5px 10px;
@@ -254,4 +257,83 @@ button {
 }
 .Usually_Button:hover {
   background-color: #0056b3;
+}
+
+
+.create-service {
+  margin: 50px 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+}
+
+.create-service-title {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.category-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.image-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.no-orders-message {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.table_column {
+  max-width: 250px;
+  vertical-align: top;
+}
+.table_column input,
+.table_column select,
+.table_column textarea {
+  max-width: 200px;
+  max-height: 100px;
+
+}
+.table_column textarea {
+}
+.table_img {
+  max-width: 150px;
+}
+.table_row th,
+.table_row td {
+  padding: 10px; /* Регулируйте значение отступа по вашему усмотрению */
+
+}
+tbody {
+  border: 1px solid #3b3a36;
+}
+.correct_img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.Error {
+  color: red;
 }

@@ -1,15 +1,6 @@
 <template>
   <footer class="footer">
     <div class="footer-content">
-<!--      <div class="mailing">-->
-<!--        <form>-->
-<!--          <input type="text" placeholder="">-->
-<!--          <button>Подписаться</button>-->
-<!--        </form>-->
-<!--        <div class="mailing_additional">-->
-<!--          Так же вы можете написат-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="footer-column">
         <h3 class="footer-heading">О нас</h3>
         <p>Наша торганизация предлагает комфортное размещение и превосходное обслуживание для всех гостей. Мы с радостью встретим вас и обеспечим приятное пребывание.</p>

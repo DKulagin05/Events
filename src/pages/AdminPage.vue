@@ -7,8 +7,8 @@
       </div>
 
       <div class="input_label_box">
-        <input type="radio" name="selectConstructor" id="hotel" value="hotel" v-model="selectedOption">
-        <label for="hotel">Создать отель</label>
+        <input type="radio" name="selectConstructor" id="hotel" value="editMenu" v-model="selectedOption">
+        <label for="hotel">Создание/Удаление</label>
       </div>
 
 
@@ -17,19 +17,19 @@
     </div>
     <div style="text-align: center; font-size: 32px" v-if="selectedOption === null">Выберите функцию</div>
     <OrdersControl v-if="selectedOption === 'orders'"/>
-<!--    <HotelConstructor v-if="selectedOption === 'hotel'"/>-->
+    <Constructor v-if="selectedOption === 'editMenu'"/>
   </div>
 </template>
 
 <script>
 import OrdersControl from '@/components/OrdersControl.vue';
-// import HotelConstructor from "@/components/HotelConstructor.vue";
+import Constructor from "@/components/Constructor.vue";
 
 export default {
   name: "AdminPage",
   components: {
+    Constructor,
     OrdersControl,
-    // HotelConstructor,
   },
   data() {
     return {
