@@ -78,8 +78,14 @@ select {
     scroll-behavior: auto !important;
   }
 }
+@font-face {
+  font-family: "NotoSans"; /* Название шрифта */
+  src: url("src/assets/fonts/NotoSans-Medium.ttf"); /* Путь к вашему файлу шрифта */
+  font-weight: normal;
+  font-style: normal;
+}
 * {
-  font-family: "M PLUS 1p", sans-serif;
+  font-family: "NotoSans", regular;
 }
 
 main {
@@ -243,6 +249,16 @@ button {
 
 .Usually_Button:hover {
   background-color: #0056b3;
+}
+
+.alert_message {
+  color: black;
+  text-align: center;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 35px;
+  margin: 50px 0;
+  word-wrap: break-word;
 }
 
 .create-service {
