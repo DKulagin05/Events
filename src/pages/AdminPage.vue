@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div class="wrapper" style="margin-bottom: 50px;">
     <div class="selects">
       <div class="input_label_box">
@@ -24,12 +25,14 @@
 <script>
 import OrdersControl from '@/components/OrdersControl.vue';
 import Constructor from "@/components/Constructor.vue";
+import Header from "../components/Header.vue";
 
 export default {
   name: "AdminPage",
   components: {
     Constructor,
     OrdersControl,
+    Header
   },
   data() {
     return {

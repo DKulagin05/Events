@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div class="container">
     <div class="about-page">
       <div class="about-banner">
@@ -48,8 +49,12 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 export default {
   name: 'AboutPage',
+  components: {
+    Header
+  },
 };
 </script>
 

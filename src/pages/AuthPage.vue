@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div>
     <h1 style="text-align: center">Страница авторизации</h1>
     <div class="selects">
@@ -20,11 +21,13 @@
 <script>
 import Registration from '../components/Registration.vue';
 import Login from "../components/Login.vue";
+import Header from "../components/Header.vue";
 
 export default {
   components: {
     Registration,
     Login,
+    Header,
   },
   data() {
     return {

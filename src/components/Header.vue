@@ -14,7 +14,8 @@
         <li v-if="!user"><router-link to="/auth">Авторизация/регистрация</router-link></li>
         <li v-if="user.admin === '1'"><router-link to="/admin">Админ панель</router-link></li>
         <li v-if="user"><router-link to="/profile">Профиль</router-link></li>
-        <li v-if="user"><router-link to="/logout">Выйти</router-link></li>
+        <li v-if="user" @click="unLogin"><router-link to="#">Выйти</router-link></li>
+
       </ul>
     </nav>
   </header>
@@ -26,13 +27,16 @@ export default {
     return {
       user: false,
       isNavOpen: false,
-      isMobile: false
+      isMobile: false,
+      InStorage: false,
     };
   },
   mounted() {
     if (localStorage.getItem('user')) {
-      this.user = true
       this.user = JSON.parse(localStorage.getItem('user'));
+      this.InStorage = true;
+    } else {
+      this.InStorage = false
     }
     this.checkMobile();
     window.addEventListener('resize', this.checkMobile);
@@ -46,6 +50,10 @@ export default {
     },
     checkMobile() {
       this.isMobile = window.innerWidth <= 600;
+    },
+    unLogin() {
+      localStorage.removeItem('user');
+      this.$router.push('/')
     }
   }
 };

@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <div class="wrapper">
 
     <div style="margin-bottom: 50px;">
@@ -55,8 +56,12 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 export default {
   name: "Services",
+  components: {
+    Header
+  },
   data() {
     return {
       selectedOption: null,

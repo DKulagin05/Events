@@ -7,8 +7,7 @@
 export default {
   name: "Logout",
   mounted() {
-    localStorage.removeItem('user');
-    this.$router.push('/auth')
+
   }
 }
 </script>

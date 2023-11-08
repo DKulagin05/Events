@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <div class="container">
     <div class="wrapper">
       <div v-if="CategoryArray.length > 0">
@@ -50,8 +51,12 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 export default {
   name: 'UserProfile',
+  components: {
+    Header
+  },
   data() {
     return {
       user: {

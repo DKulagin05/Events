@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <div class="wrapper">
     <h1 class="Name_company">FiestaFusion</h1>
     <Slider/>
@@ -18,11 +19,13 @@
 
 <script>
 import Slider from "@/components/Slider.vue";
+import Header from "@/components/Header.vue";
 
 export default {
   name: "MainPage",
   components: {
-    Slider
+    Slider,
+    Header,
   },
   methods: {
 

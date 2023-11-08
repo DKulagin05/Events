@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div class="wrapper">
     <div class="review-form" v-if="user_name !== null">
       <h2>Оставить отзыв</h2>
@@ -58,11 +59,13 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 import Rating from '@/components/Rating.vue'
 export default {
   name: 'ReviewPage',
   components: {
-    Rating
+    Rating,
+    Header
   },
   data() {
     return {

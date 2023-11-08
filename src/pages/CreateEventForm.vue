@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div class="create-event-form">
     <h1>Создать мероприятие</h1>
     <form @submit.prevent="onSubmit">
@@ -42,9 +43,12 @@
 </template>
 
 <script>
+import Header from "../components/Header.vue";
 export default {
-
   name: "CreateEventForm",
+  components: {
+    Header
+  },
   data() {
     return {
       event: {

@@ -1,4 +1,5 @@
 <template>
+  <Header/>
   <div class="wrapper">
     <div class="event-details">
       <h2>Детали мероприятия</h2>
@@ -58,10 +59,11 @@
 
 <script>
 import ServiceSelection from "../components/ServiceSelection.vue";
-
+import Header from "../components/Header.vue";
 export default {
   components: {
     'service-selection': ServiceSelection,
+    Header,
   },
   name: "EventDetails",
   data() {
